@@ -6,9 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.ahmedetman.peopleapitask.R;
 import com.example.ahmedetman.peopleapitask.models.CharacterItem;
@@ -70,5 +70,24 @@ public class MainActivity extends Activity implements MainActivityView {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        prepareAdapterListener();
+    }
+
+    private void prepareAdapterListener(){
+        adapter.setOnFavClickListener(new CharactersAdapter.CharacterClickListener() {
+            @Override
+            public void onCharacterItemClick(CharacterItem characterItem) {
+                Toast.makeText(MainActivity.this, "fav " + characterItem.getName(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        adapter.setOnItemClickListener(new CharactersAdapter.CharacterClickListener() {
+            @Override
+            public void onCharacterItemClick(CharacterItem characterItem) {
+                Toast.makeText(MainActivity.this, "item " + characterItem.getName(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

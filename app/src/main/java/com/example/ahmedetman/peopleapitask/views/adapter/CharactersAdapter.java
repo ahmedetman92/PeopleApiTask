@@ -1,10 +1,13 @@
 package com.example.ahmedetman.peopleapitask.views.adapter;
 
+import android.content.pm.ApplicationInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import android.widget.Filter;
@@ -22,6 +25,17 @@ import java.util.List;
 
 public class CharactersAdapter extends
         RecyclerView.Adapter<CharactersAdapter.CustomViewHolder> implements Filterable {
+
+    private CharacterClickListener mFavCharacterClickListener;
+    private CharacterClickListener mCharacterClickListener;
+
+    public void setOnFavClickListener(CharacterClickListener favClickListener) {
+        this.mFavCharacterClickListener = favClickListener;
+    }
+
+    public void setOnItemClickListener(CharacterClickListener characterClickListener) {
+        this.mCharacterClickListener = characterClickListener;
+    }
 
 
     private List<CharacterItem> mCharactersList;
@@ -42,8 +56,25 @@ public class CharactersAdapter extends
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CustomViewHolder holder, final int position) {
         holder.bindItem(characterListFiltered.get(position));
+        holder.img_favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mFavCharacterClickListener != null){
+                    mFavCharacterClickListener.onCharacterItemClick(characterListFiltered.get(position));
+                }
+            }
+        });
+
+        holder.layout_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mCharacterClickListener != null){
+                    mCharacterClickListener.onCharacterItemClick(characterListFiltered.get(position));
+                }
+            }
+        });
     }
 
     @Override
@@ -91,12 +122,16 @@ public class CharactersAdapter extends
     class CustomViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name, tv_year;
         View v_separator;
+        ImageView img_favorite;
+        LinearLayout layout_container;
 
         public CustomViewHolder(View view) {
             super(view);
             this.tv_name = view.findViewById(R.id.tv_name);
             this.tv_year = view.findViewById(R.id.tv_year);
             this.v_separator = view.findViewById(R.id.item_separator);
+            this.img_favorite = view.findViewById(R.id.img_fav);
+            this.layout_container = view.findViewById(R.id.layout_text_container);
         }
 
         void bindItem(CharacterItem characterItem) {
@@ -104,4 +139,9 @@ public class CharactersAdapter extends
             tv_year.setText(characterItem.getBirth_year());
         }
     }
+
+    public interface CharacterClickListener{
+        void onCharacterItemClick(CharacterItem characterItem);
+    }
+
 }
