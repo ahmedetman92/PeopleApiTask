@@ -78,13 +78,19 @@ public class CharactersListDataProvider {
     }
 
     private void getDataForOfflineMode(MainActivityPresenter mainActivityPresenter) {
-        DBHelper dbHelper = new DBHelper(ApplicationContextProvider.getContext());
-        List<CharacterItem> characterItems = dbHelper.getAll(CharacterItem.class);
-        if (characterItems != null) {
-            mainActivityPresenter.onLoadCharactersSuccess(characterItems);
+
+        List<CharacterItem> savedItems  = getOfflineItems();
+        if (savedItems != null) {
+            mainActivityPresenter.onLoadCharactersSuccess(savedItems);
         } else {
             mainActivityPresenter.onLoadCharactersFail(ApplicationContextProvider
                     .getContext().getString(R.string.error_empty_body));
         }
+    }
+
+    public List<CharacterItem> getOfflineItems(){
+        DBHelper dbHelper = new DBHelper(ApplicationContextProvider.getContext());
+        List<CharacterItem> characterItems = dbHelper.getAll(CharacterItem.class);
+        return characterItems;
     }
 }

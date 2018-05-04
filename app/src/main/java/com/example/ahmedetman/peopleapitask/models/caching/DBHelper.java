@@ -54,7 +54,7 @@ public class DBHelper<T> extends OrmLiteSqliteOpenHelper {
         Dao<T, ?> dao = null;
 
         try {
-            dao = getDao(clazz);
+            dao = getDao((Class<T>) clazz);
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
@@ -69,19 +69,10 @@ public class DBHelper<T> extends OrmLiteSqliteOpenHelper {
         }
     }
 
-    public  T getById(Class clazz, Object aId) throws SQLException, java.sql.SQLException {
-        Dao<T, Object> dao = getDao(clazz);
-        return dao.queryForId(aId);
-    }
-
     public Dao.CreateOrUpdateStatus createOrUpdate(T obj) throws SQLException, java.sql.SQLException {
         Dao<T, ?> dao = (Dao<T, ?>) getDao(obj.getClass());
         Dao.CreateOrUpdateStatus res = dao.createOrUpdate(obj);
         return dao.createOrUpdate(obj);
     }
 
-    public  int deleteById(Class clazz, Object aId) throws SQLException, java.sql.SQLException {
-        Dao<T, Object> dao = getDao(clazz);
-        return dao.deleteById(aId);
-    }
 }

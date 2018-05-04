@@ -3,5 +3,7 @@
     <string name="error_empty_body">There is no characters at the moment</string>
     <string name="btn_fav_text">Favorite</string>
     <string name="et_hint_text">Search</string>
+    <string name="title_activity_details">DetailsActivity</string>
+    <string name="btn_all_text">Show All</string>
 
 </resources>

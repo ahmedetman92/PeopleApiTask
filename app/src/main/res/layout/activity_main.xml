@@ -11,12 +11,30 @@
     tools:context="com.example.ahmedetman.peopleapitask.views.MainActivity">
 
 
-    <Button
-        android:id="@+id/btn_show_favourite"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_fav_text"
-        android:textAllCaps="false" />
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/btn_show_favourite"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_fav_text"
+            android:textAllCaps="false" />
+
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/btn_show_all"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_all_text"
+            android:textAllCaps="false" />
+
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/et_filter"

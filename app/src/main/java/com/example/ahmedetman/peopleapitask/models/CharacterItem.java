@@ -5,6 +5,7 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  */
 
 @DatabaseTable(tableName = "characters")
-public class CharacterItem {
+public class CharacterItem implements Serializable{
 
     @DatabaseField(id = true, useGetSet = true)
     private int id;

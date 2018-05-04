@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Ahmed Etman on 5/4/2018.
@@ -66,5 +67,11 @@ public class MainActivityPresenterImp implements MainActivityPresenter {
             return list;
         }else
             return null;
+    }
+
+    private void getFavorite(){
+        List<CharacterItem> listToFilter = CharactersListDataProvider.getInstance().getOfflineItems();
+        List<CharacterItem> favoriteList = listToFilter.stream()
+                .filter(CharacterItem::isFavorite).collect(Collectors.toList());
     }
 }
