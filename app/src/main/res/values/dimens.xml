@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="separator_height">1dp</dimen>
+    <dimen name="separator_top_margin">5dp</dimen>
+    <dimen name="item_layout_padding">5dp</dimen>
+    <dimen name="text_size_name">26sp</dimen>
+    <dimen name="text_size_year">20sp</dimen>
+
+</resources>
