@@ -38,9 +38,5 @@ public interface MainActivityPresenter {
      */
     void onPerformFavoriteAction();
 
-    /**
-     * getting all items from Api
-     */
-    void onPerformGetAllAction();
 
 }

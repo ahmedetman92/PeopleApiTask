@@ -62,11 +62,6 @@ public class MainActivityPresenterImp implements MainActivityPresenter {
         ;
     }
 
-    @Override
-    public void onPerformGetAllAction() {
-        CharactersListDataProvider.getInstance().getAllCharacters(this);
-    }
-
     /**
      * sorting the list alphabetically
      * @param list
