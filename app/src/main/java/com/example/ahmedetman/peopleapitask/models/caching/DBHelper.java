@@ -52,6 +52,12 @@ public class DBHelper<T> extends OrmLiteSqliteOpenHelper {
     }
 
 
+    /**
+     * getting all the items inside the db
+     * @param clazz
+     * @return
+     * @throws SQLException
+     */
     public List getAll(Class clazz) throws SQLException {
         Dao<T, ?> dao = null;
 
@@ -71,16 +77,26 @@ public class DBHelper<T> extends OrmLiteSqliteOpenHelper {
         }
     }
 
+    /**
+     * creating or updating new objects
+     * @param obj
+     * @return
+     * @throws SQLException
+     * @throws java.sql.SQLException
+     */
     public Dao.CreateOrUpdateStatus createOrUpdate(T obj) throws SQLException, java.sql.SQLException {
         Dao<T, ?> dao = (Dao<T, ?>) getDao(obj.getClass());
         return dao.createOrUpdate(obj);
     }
 
+    /**
+     * updating specific object based on the id
+     * @param itemId
+     */
     public void update(int itemId) {
         UpdateBuilder<CharacterItem, Long> updateBuilder = null;
         try {
             updateBuilder = (UpdateBuilder<CharacterItem, Long>) DBHelper.this.getDao(CharacterItem.class).updateBuilder();
-            //updateBuilder = (UpdateBuilder<CharacterItem, Integer>) getDao(CharacterItem.class).updateBuilder();
             // set the criteria like you would a QueryBuilder
             updateBuilder.where().eq("id", itemId);
             // update the value of your field(s)

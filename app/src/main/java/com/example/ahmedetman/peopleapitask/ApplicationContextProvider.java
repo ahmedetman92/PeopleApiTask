@@ -16,6 +16,10 @@ public class ApplicationContextProvider extends Application {
         sContext = getApplicationContext();
     }
 
+    /**
+     * providing instance of the application
+     * @return
+     */
     public static Context getContext() {
         return sContext;
     }
