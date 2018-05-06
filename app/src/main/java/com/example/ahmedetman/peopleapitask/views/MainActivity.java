@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.ahmedetman.peopleapitask.ApplicationContextProvider;
@@ -24,7 +25,7 @@ import com.example.ahmedetman.peopleapitask.views.adapter.CharactersAdapter;
 
 import java.util.List;
 
-public class MainActivity extends Activity implements MainActivityView {
+public class MainActivity extends BaseActivity implements MainActivityView {
 
     public static final String KEY_ITEM = "KEY_ITEM";
     private ProgressDialog progressDialog;
@@ -88,7 +89,11 @@ public class MainActivity extends Activity implements MainActivityView {
 
 
     private void displayCharacterList(List<CharacterItem> characterItems) {
-        if (characterItems != null) {
+        if (characterItems == null || characterItems.size() == 0) {
+            Toast.makeText(this,
+                    MainActivity.this.getString(R.string.no_item_found),
+                    Toast.LENGTH_SHORT).show();
+        } else {
             adapter = new CharactersAdapter(characterItems);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(adapter);
@@ -106,7 +111,6 @@ public class MainActivity extends Activity implements MainActivityView {
             Toast.makeText(MainActivity.this,
                     MainActivity.this.getString(R.string.added_to_fav)
                     , Toast.LENGTH_SHORT).show();
-
         });
 
         adapter.setOnItemClickListener((characterItem, position) -> {
@@ -121,32 +125,5 @@ public class MainActivity extends Activity implements MainActivityView {
     @Override
     public void showCharactersList(List<CharacterItem> characterItems) {
         displayCharacterList(characterItems);
-    }
-
-    @Override
-    public void showLoading() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getString(R.string.text_pleasewait));
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                finish();
-            }
-        });
-        progressDialog.show();
-    }
-
-    @Override
-    public void hideLoading() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            try {
-                progressDialog.dismiss();
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
     }
 }

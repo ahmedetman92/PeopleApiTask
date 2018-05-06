@@ -8,5 +8,6 @@
     <string name="text_pleasewait">Please wait...</string>
     <string name="added_to_fav">Added to favorite!</string>
     <string name="menu_all_text">Show All</string>
+    <string name="no_item_found">No characters found!</string>
 
 </resources>

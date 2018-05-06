@@ -60,13 +60,11 @@ public class MainActivityPresenterImp implements MainActivityPresenter {
     public void onPerformFavoriteAction() {
         mMainActivityView.showCharactersList(sortCharacter(
                 CharactersListDataProvider.getInstance().getFavorite()));
-        ;
     }
 
     @Override
     public void onPerformShowAllItemsAction() {
         mMainActivityView.showLoading();
-        //CharactersListDataProvider.getInstance().getAllCharacters(this);
         mMainActivityView.showCharactersList(sortCharacter(
                 CharactersListDataProvider.getInstance().getOfflineItems()));
         mMainActivityView.hideLoading();

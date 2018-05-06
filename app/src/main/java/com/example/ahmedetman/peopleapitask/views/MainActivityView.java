@@ -8,9 +8,7 @@ import java.util.List;
  * Created by Ahmed Etman on 5/4/2018.
  */
 
-public interface MainActivityView {
+public interface MainActivityView extends BaseActivityActions{
 
     void showCharactersList(List<CharacterItem> characterItems);
-    void showLoading();
-    void hideLoading();
 }
