@@ -3,6 +3,7 @@ package com.example.ahmedetman.peopleapitask.views;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,7 @@ import java.util.List;
 
 public class MainActivity extends Activity implements MainActivityView {
 
+    public static final String KEY_ITEM = "KEY_ITEM";
     private ProgressDialog progressDialog;
     private MainActivityPresenterImp mMainActivityPresenterImp;
     private RecyclerView recyclerView;
@@ -50,7 +52,7 @@ public class MainActivity extends Activity implements MainActivityView {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_item_favorite:
                 mMainActivityPresenterImp.onPerformFavoriteAction();
                 return true;
@@ -96,34 +98,22 @@ public class MainActivity extends Activity implements MainActivityView {
     }
 
     private void prepareAdapterListener() {
-        adapter.setOnFavClickListener(new CharactersAdapter.CharacterClickListener() {
-            @Override
-            public void onCharacterItemClick(CharacterItem characterItem, int position) {
-                characterItem.setFavorite(true);
-                DBHelper dbHelper = new DBHelper(ApplicationContextProvider.getContext());
+        adapter.setOnFavClickListener((characterItem, position) -> {
+            characterItem.setFavorite(true);
+            DBHelper dbHelper = new DBHelper(ApplicationContextProvider.getContext());
 
-                    dbHelper.update(position);
-                    Toast.makeText(MainActivity.this,
-                            MainActivity.this.getString(R.string.added_to_fav)
-                            , Toast.LENGTH_SHORT).show();
+            dbHelper.update(position);
+            Toast.makeText(MainActivity.this,
+                    MainActivity.this.getString(R.string.added_to_fav)
+                    , Toast.LENGTH_SHORT).show();
 
-            }
         });
 
-        adapter.setOnItemClickListener(new CharactersAdapter.CharacterClickListener() {
-            @Override
-            public void onCharacterItemClick(CharacterItem characterItem, int position) {
-                Toast.makeText(MainActivity.this, "item " + characterItem.getName(),
-                        Toast.LENGTH_SHORT).show();
+        adapter.setOnItemClickListener((characterItem, position) -> {
 
-//                Intent i = new Intent(MainActivity.this, DetailsActivity.class);
-//
-//                    Bundle b = new Bundle();
-//                    b.putParcelable(APP_INFO_DATA, applicationInfo);
-//                    i.putExtras(b);
-//
-//                startActivity(i);
-            }
+            Intent i = new Intent(MainActivity.this, DetailsActivity.class);
+            i.putExtra(KEY_ITEM, characterItem);
+            startActivity(i);
         });
     }
 
