@@ -62,7 +62,8 @@ public class CharactersAdapter extends
             @Override
             public void onClick(View view) {
                 if(mFavCharacterClickListener != null){
-                    mFavCharacterClickListener.onCharacterItemClick(characterListFiltered.get(position));
+                    mFavCharacterClickListener.onCharacterItemClick(characterListFiltered.get(position)
+                            ,position);
                 }
             }
         });
@@ -71,7 +72,8 @@ public class CharactersAdapter extends
             @Override
             public void onClick(View view) {
                 if(mCharacterClickListener != null){
-                    mCharacterClickListener.onCharacterItemClick(characterListFiltered.get(position));
+                    mCharacterClickListener.onCharacterItemClick(characterListFiltered.get(position),
+                            position);
                 }
             }
         });
@@ -141,7 +143,7 @@ public class CharactersAdapter extends
     }
 
     public interface CharacterClickListener{
-        void onCharacterItemClick(CharacterItem characterItem);
+        void onCharacterItemClick(CharacterItem characterItem,int position);
     }
 
 }

@@ -10,24 +10,6 @@
     android:orientation="vertical"
     tools:context="com.example.ahmedetman.peopleapitask.views.MainActivity">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <Button
-            android:id="@+id/btn_show_favourite"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/btn_fav_text"
-            android:textAllCaps="false" />
-
-
-    </LinearLayout>
-
     <EditText
         android:id="@+id/et_filter"
         android:layout_width="match_parent"

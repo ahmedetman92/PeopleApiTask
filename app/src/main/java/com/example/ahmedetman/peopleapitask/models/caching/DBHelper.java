@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.ahmedetman.peopleapitask.models.CharacterItem;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -50,7 +52,7 @@ public class DBHelper<T> extends OrmLiteSqliteOpenHelper {
     }
 
 
-    public  List getAll(Class clazz) throws SQLException {
+    public List getAll(Class clazz) throws SQLException {
         Dao<T, ?> dao = null;
 
         try {
@@ -59,7 +61,7 @@ public class DBHelper<T> extends OrmLiteSqliteOpenHelper {
             e.printStackTrace();
         }
         try {
-            if(dao != null){
+            if (dao != null) {
                 return dao.queryForAll();
             } else
                 return null;
@@ -72,6 +74,21 @@ public class DBHelper<T> extends OrmLiteSqliteOpenHelper {
     public Dao.CreateOrUpdateStatus createOrUpdate(T obj) throws SQLException, java.sql.SQLException {
         Dao<T, ?> dao = (Dao<T, ?>) getDao(obj.getClass());
         return dao.createOrUpdate(obj);
+    }
+
+    public void update(int itemId) {
+        UpdateBuilder<CharacterItem, Long> updateBuilder = null;
+        try {
+            updateBuilder = (UpdateBuilder<CharacterItem, Long>) DBHelper.this.getDao(CharacterItem.class).updateBuilder();
+            //updateBuilder = (UpdateBuilder<CharacterItem, Integer>) getDao(CharacterItem.class).updateBuilder();
+            // set the criteria like you would a QueryBuilder
+            updateBuilder.where().eq("id", itemId);
+            // update the value of your field(s)
+            updateBuilder.updateColumnValue("isFavorite" /* column */, true /* value */);
+            updateBuilder.update();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

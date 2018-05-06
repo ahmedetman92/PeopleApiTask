@@ -39,4 +39,10 @@ public interface MainActivityPresenter {
     void onPerformFavoriteAction();
 
 
+    /**
+     * getting all items and show them
+     */
+    void onPerformShowAllItemsAction();
+
+
 }

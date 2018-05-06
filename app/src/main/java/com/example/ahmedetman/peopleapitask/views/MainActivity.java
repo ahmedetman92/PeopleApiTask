@@ -3,15 +3,14 @@ package com.example.ahmedetman.peopleapitask.views;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,7 +21,6 @@ import com.example.ahmedetman.peopleapitask.models.caching.DBHelper;
 import com.example.ahmedetman.peopleapitask.presenters.MainActivityPresenterImp;
 import com.example.ahmedetman.peopleapitask.views.adapter.CharactersAdapter;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class MainActivity extends Activity implements MainActivityView {
@@ -30,7 +28,6 @@ public class MainActivity extends Activity implements MainActivityView {
     private ProgressDialog progressDialog;
     private MainActivityPresenterImp mMainActivityPresenterImp;
     private RecyclerView recyclerView;
-    private Button btnFavorite;
     private EditText etFilter;
     private CharactersAdapter adapter;
 
@@ -44,9 +41,28 @@ public class MainActivity extends Activity implements MainActivityView {
         mMainActivityPresenterImp = new MainActivityPresenterImp(this);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_favorite:
+                mMainActivityPresenterImp.onPerformFavoriteAction();
+                return true;
+            case R.id.menu_item_all:
+                mMainActivityPresenterImp.onPerformShowAllItemsAction();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void initViews() {
         recyclerView = findViewById(R.id.rv_characters);
-        btnFavorite = findViewById(R.id.btn_show_favourite);
         etFilter = findViewById(R.id.et_filter);
 
         etFilter.addTextChangedListener(new TextWatcher() {
@@ -66,8 +82,6 @@ public class MainActivity extends Activity implements MainActivityView {
             }
         });
 
-        btnFavorite.setOnClickListener(view -> mMainActivityPresenterImp.onPerformFavoriteAction());
-
     }
 
 
@@ -84,21 +98,21 @@ public class MainActivity extends Activity implements MainActivityView {
     private void prepareAdapterListener() {
         adapter.setOnFavClickListener(new CharactersAdapter.CharacterClickListener() {
             @Override
-            public void onCharacterItemClick(CharacterItem characterItem) {
-
+            public void onCharacterItemClick(CharacterItem characterItem, int position) {
                 characterItem.setFavorite(true);
                 DBHelper dbHelper = new DBHelper(ApplicationContextProvider.getContext());
-                try {
-                    dbHelper.createOrUpdate(characterItem);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+
+                    dbHelper.update(position);
+                    Toast.makeText(MainActivity.this,
+                            MainActivity.this.getString(R.string.added_to_fav)
+                            , Toast.LENGTH_SHORT).show();
+
             }
         });
 
         adapter.setOnItemClickListener(new CharactersAdapter.CharacterClickListener() {
             @Override
-            public void onCharacterItemClick(CharacterItem characterItem) {
+            public void onCharacterItemClick(CharacterItem characterItem, int position) {
                 Toast.makeText(MainActivity.this, "item " + characterItem.getName(),
                         Toast.LENGTH_SHORT).show();
 

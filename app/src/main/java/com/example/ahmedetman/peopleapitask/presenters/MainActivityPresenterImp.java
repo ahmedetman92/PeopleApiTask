@@ -39,7 +39,8 @@ public class MainActivityPresenterImp implements MainActivityPresenter {
 
     @Override
     public void cacheCharactersList(List<CharacterItem> charactersLists) {
-        if(CharactersListDataProvider.getInstance().getOfflineItems() == null) {
+        if(CharactersListDataProvider.getInstance().getOfflineItems() == null ||
+                CharactersListDataProvider.getInstance().getOfflineItems().size() == 0) {
             DBHelper dbHelper = new DBHelper(ApplicationContextProvider.getContext());
             int index = 0;
             for (CharacterItem characterItem :
@@ -60,6 +61,16 @@ public class MainActivityPresenterImp implements MainActivityPresenter {
         mMainActivityView.showCharactersList(sortCharacter(
                 CharactersListDataProvider.getInstance().getFavorite()));
         ;
+    }
+
+    @Override
+    public void onPerformShowAllItemsAction() {
+        mMainActivityView.showLoading();
+        //CharactersListDataProvider.getInstance().getAllCharacters(this);
+        mMainActivityView.showCharactersList(sortCharacter(
+                CharactersListDataProvider.getInstance().getOfflineItems()));
+        mMainActivityView.hideLoading();
+
     }
 
     /**
