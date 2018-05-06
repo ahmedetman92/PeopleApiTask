@@ -1,6 +1,8 @@
 package com.example.ahmedetman.peopleapitask.views;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SyncStateContract;
@@ -25,9 +27,10 @@ import java.util.List;
 
 public class MainActivity extends Activity implements MainActivityView {
 
+    private ProgressDialog progressDialog;
     private MainActivityPresenterImp mMainActivityPresenterImp;
     private RecyclerView recyclerView;
-    private Button btnFavorite, btnShowAll;
+    private Button btnFavorite;
     private EditText etFilter;
     private CharactersAdapter adapter;
 
@@ -44,7 +47,6 @@ public class MainActivity extends Activity implements MainActivityView {
     private void initViews() {
         recyclerView = findViewById(R.id.rv_characters);
         btnFavorite = findViewById(R.id.btn_show_favourite);
-        btnShowAll = findViewById(R.id.btn_show_all);
         etFilter = findViewById(R.id.et_filter);
 
         etFilter.addTextChangedListener(new TextWatcher() {
@@ -64,35 +66,25 @@ public class MainActivity extends Activity implements MainActivityView {
             }
         });
 
-        btnFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnFavorite.setOnClickListener(view -> mMainActivityPresenterImp.onPerformFavoriteAction());
 
-            }
-        });
     }
 
 
-    @Override
-    public void showCharactersList(List<CharacterItem> characterItems) {
-        displayCharacterList(characterItems);
-    }
-
-
-    private void displayCharacterList(List<CharacterItem> characterItems){
-        adapter = new CharactersAdapter(characterItems);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+    private void displayCharacterList(List<CharacterItem> characterItems) {
+        if (characterItems != null) {
+            adapter = new CharactersAdapter(characterItems);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }
         prepareAdapterListener();
     }
 
-    private void prepareAdapterListener(){
+    private void prepareAdapterListener() {
         adapter.setOnFavClickListener(new CharactersAdapter.CharacterClickListener() {
             @Override
             public void onCharacterItemClick(CharacterItem characterItem) {
-//                Toast.makeText(MainActivity.this, "fav " + characterItem.getName(),
-//                        Toast.LENGTH_SHORT).show();
 
                 characterItem.setFavorite(true);
                 DBHelper dbHelper = new DBHelper(ApplicationContextProvider.getContext());
@@ -119,5 +111,38 @@ public class MainActivity extends Activity implements MainActivityView {
 //                startActivity(i);
             }
         });
+    }
+
+
+    @Override
+    public void showCharactersList(List<CharacterItem> characterItems) {
+        displayCharacterList(characterItems);
+    }
+
+    @Override
+    public void showLoading() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.text_pleasewait));
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+            }
+        });
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            try {
+                progressDialog.dismiss();
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }

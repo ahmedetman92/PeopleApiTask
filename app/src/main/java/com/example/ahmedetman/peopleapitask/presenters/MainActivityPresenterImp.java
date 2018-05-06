@@ -22,12 +22,14 @@ public class MainActivityPresenterImp implements MainActivityPresenter {
     private MainActivityView mMainActivityView;
     public MainActivityPresenterImp(MainActivityView mainActivityView) {
         this.mMainActivityView = mainActivityView;
+        mMainActivityView.showLoading();
         CharactersListDataProvider.getInstance().getAllCharacters(this);
     }
 
     @Override
     public void onLoadCharactersSuccess(List<CharacterItem> charactersLists) {
         mMainActivityView.showCharactersList(sortCharacter(charactersLists));
+        mMainActivityView.hideLoading();
     }
 
     @Override
@@ -37,18 +39,32 @@ public class MainActivityPresenterImp implements MainActivityPresenter {
 
     @Override
     public void cacheCharactersList(List<CharacterItem> charactersLists) {
-        DBHelper dbHelper = new DBHelper(ApplicationContextProvider.getContext());
-        int index = 0;
-        for (CharacterItem characterItem :
-                charactersLists) {
-            try {
-                characterItem.setId(index);
-                dbHelper.createOrUpdate(characterItem);
-                index++;
-            } catch (SQLException e) {
-                e.printStackTrace();
+        if(CharactersListDataProvider.getInstance().getOfflineItems() == null) {
+            DBHelper dbHelper = new DBHelper(ApplicationContextProvider.getContext());
+            int index = 0;
+            for (CharacterItem characterItem :
+                    charactersLists) {
+                try {
+                    characterItem.setId(index);
+                    dbHelper.createOrUpdate(characterItem);
+                    index++;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
+    }
+
+    @Override
+    public void onPerformFavoriteAction() {
+        mMainActivityView.showCharactersList(sortCharacter(
+                CharactersListDataProvider.getInstance().getFavorite()));
+        ;
+    }
+
+    @Override
+    public void onPerformGetAllAction() {
+        CharactersListDataProvider.getInstance().getAllCharacters(this);
     }
 
     /**
@@ -69,9 +85,4 @@ public class MainActivityPresenterImp implements MainActivityPresenter {
             return null;
     }
 
-    private void getFavorite(){
-        List<CharacterItem> listToFilter = CharactersListDataProvider.getInstance().getOfflineItems();
-        List<CharacterItem> favoriteList = listToFilter.stream()
-                .filter(CharacterItem::isFavorite).collect(Collectors.toList());
-    }
 }

@@ -26,11 +26,21 @@ public interface MainActivityPresenter {
 
 
     /**
-     * cahing the data that we go from api
+     * caching the data that we go from api
      *
      * @param charactersLists
      */
     void cacheCharactersList(List<CharacterItem> charactersLists);
 
+
+    /**
+     * getting favorite items from db to show it
+     */
+    void onPerformFavoriteAction();
+
+    /**
+     * getting all items from Api
+     */
+    void onPerformGetAllAction();
 
 }

@@ -5,5 +5,6 @@
     <string name="et_hint_text">Search</string>
     <string name="title_activity_details">DetailsActivity</string>
     <string name="btn_all_text">Show All</string>
+    <string name="text_pleasewait">Please wait...</string>
 
 </resources>

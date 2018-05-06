@@ -11,4 +11,6 @@ import java.util.List;
 public interface MainActivityView {
 
     void showCharactersList(List<CharacterItem> characterItems);
+    void showLoading();
+    void hideLoading();
 }

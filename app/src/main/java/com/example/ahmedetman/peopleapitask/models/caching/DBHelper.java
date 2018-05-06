@@ -35,7 +35,7 @@ public class DBHelper<T> extends OrmLiteSqliteOpenHelper {
         try {
 
             // Create Table with given table name with columnName
-            TableUtils.createTable(cs, CharacterItem.class);
+            TableUtils.createTableIfNotExists(cs, CharacterItem.class);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -71,7 +71,6 @@ public class DBHelper<T> extends OrmLiteSqliteOpenHelper {
 
     public Dao.CreateOrUpdateStatus createOrUpdate(T obj) throws SQLException, java.sql.SQLException {
         Dao<T, ?> dao = (Dao<T, ?>) getDao(obj.getClass());
-        Dao.CreateOrUpdateStatus res = dao.createOrUpdate(obj);
         return dao.createOrUpdate(obj);
     }
 

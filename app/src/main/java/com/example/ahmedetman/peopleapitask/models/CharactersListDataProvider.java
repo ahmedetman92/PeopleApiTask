@@ -10,6 +10,7 @@ import com.example.ahmedetman.peopleapitask.utils.NetworkConnectionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,8 +78,11 @@ public class CharactersListDataProvider {
         }
     }
 
+    /**
+     * saving data for the offline mode
+     * @param mainActivityPresenter
+     */
     private void getDataForOfflineMode(MainActivityPresenter mainActivityPresenter) {
-
         List<CharacterItem> savedItems  = getOfflineItems();
         if (savedItems != null) {
             mainActivityPresenter.onLoadCharactersSuccess(savedItems);
@@ -88,9 +92,24 @@ public class CharactersListDataProvider {
         }
     }
 
+    /**
+     * get list of offline data
+     * @return
+     */
     public List<CharacterItem> getOfflineItems(){
         DBHelper dbHelper = new DBHelper(ApplicationContextProvider.getContext());
         List<CharacterItem> characterItems = dbHelper.getAll(CharacterItem.class);
         return characterItems;
+    }
+
+
+    /**
+     * get the favorite list of the characters
+     */
+    public List<CharacterItem> getFavorite(){
+        List<CharacterItem> listToFilter = getOfflineItems();
+        List<CharacterItem> favoriteList = listToFilter.stream()
+                .filter(CharacterItem::isFavorite).collect(Collectors.toList());
+        return favoriteList;
     }
 }
